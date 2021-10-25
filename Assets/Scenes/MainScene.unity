@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44824827, g: 0.49827528, b: 0.5755824, a: 1}
+  m_IndirectSpecularColor: {r: 0.4482491, g: 0.49827605, b: 0.5755831, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2298,6 +2298,7 @@ GameObject:
   - component: {fileID: 361349219}
   - component: {fileID: 361349232}
   - component: {fileID: 361349220}
+  - component: {fileID: 361349236}
   m_Layer: 0
   m_Name: Main_Loop
   m_TagString: Untagged
@@ -2502,6 +2503,10 @@ MonoBehaviour:
   - _typeAssemblyQualifiedName: SaveManager, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
     _typeFullName: SaveManager
+    _pause: 0
+  - _typeAssemblyQualifiedName: SendStatements, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    _typeFullName: SendStatements
     _pause: 0
   _lateUpdateSystemDescriptions:
   - _typeAssemblyQualifiedName: HighLightSystem, Assembly-CSharp, Version=0.0.0.0,
@@ -2711,6 +2716,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9433476ced47ced42ae6170b5aff88a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &361349236
+MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 361349215}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a341e75ee49bc8f4c898c2285e7fc182, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &388713684

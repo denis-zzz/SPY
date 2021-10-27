@@ -69,7 +69,8 @@ public class EndGameManager : FSystem
                             {
                                 verb = "completed",
                                 objectType = "level",
-                                objectName = "level " + (gameData.levelToLoad.Item2).ToString(),
+                                objectName = "level " + (gameData.levelToLoad.Item2 + 1).ToString() +
+                                " in " + (gameData.timer).ToString() + " seconds",
                             });
                         };
                     }

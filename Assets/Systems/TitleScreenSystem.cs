@@ -169,6 +169,7 @@ public class TitleScreenSystem : FSystem
     {
         gameData.levelToLoad = (levelDirectory, level);
         GameObjectManager.loadScene("MainScene");
+        gameData.timer_paused = false;
     }
 
     // See Retour button in editor

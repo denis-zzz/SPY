@@ -15,6 +15,7 @@ public class LevelGenerator : FSystem {
 	private Family levelGO = FamilyManager.getFamily(new AnyOfComponents(typeof(Position), typeof(CurrentAction)));
 	private Family enemyScript = FamilyManager.getFamily(new AllOfComponents(typeof(HorizontalLayoutGroup), typeof(CanvasRenderer)), new NoneOfComponents(typeof(Image)));
 	private Family editableScriptContainer = FamilyManager.getFamily(new AllOfComponents(typeof(UITypeContainer), typeof(VerticalLayoutGroup), typeof(CanvasRenderer), typeof(PointerSensitive)));
+	private Family teleporterGO = FamilyManager.getFamily(new AllOfComponents(typeof(Position), typeof(Teleporter), typeof(AudioSource)), new AnyOfTags("Teleporter"));
 	private List<List<int>> map;
 	private GameData gameData;
 	private GameObject scriptContainer;
@@ -168,6 +169,18 @@ public class LevelGenerator : FSystem {
 		GameObjectManager.bind(spawnExit);
 	}
 
+	private void createTeleporter(int x1, int z1, int x2, int z2)
+	{
+		GameObject teleporter;
+		teleporter = Object.Instantiate<GameObject>(Resources.Load("Prefabs/Teleporter") as GameObject, gameData.Level.transform.position + new Vector3(x1 * 3, 1.5f, z1 * 3), Quaternion.Euler(-90, 0, 0), gameData.Level.transform);
+
+		teleporter.GetComponent<Position>().x = x1;
+		teleporter.GetComponent<Position>().z = z1;
+		teleporter.GetComponent<Teleporter>().x2 = x2;
+		teleporter.GetComponent<Teleporter>().z2 = z2;
+		GameObjectManager.bind(teleporter);
+	}
+
 	private void createCoin(int i, int j){
 		GameObject coin = Object.Instantiate<GameObject>(Resources.Load ("Prefabs/Coin") as GameObject, gameData.Level.transform.position + new Vector3(i*3,3,j*3), Quaternion.Euler(90,0,0), gameData.Level.transform);
 		coin.GetComponent<Position>().x = i;
@@ -220,6 +233,9 @@ public class LevelGenerator : FSystem {
 					if(child.Attributes["img"] !=null)
 						src = child.Attributes.GetNamedItem("img").Value;
 					gameData.dialogMessage.Add((child.Attributes.GetNamedItem("dialog").Value, src));
+					break;
+				case "teleporters":
+					readXMLTeleporters(child);
 					break;
 				case "actionBlocLimit":
 					readXMLLimits(child);
@@ -279,6 +295,22 @@ public class LevelGenerator : FSystem {
 			if (!gameData.actionBlocLimit.ContainsKey(actionName)){
 				gameData.actionBlocLimit[actionName] = int.Parse(limitNode.Attributes.GetNamedItem("limit").Value);
 			}
+		}
+	}
+	private void readXMLTeleporters(XmlNode teleportersNode)
+	{
+		int x1;
+		int z1;
+		int x2;
+		int z2;
+		foreach (XmlNode teleportNode in teleportersNode.ChildNodes)
+		{
+			//gameData.actionBlocLimit.Add(int.Parse(limitNode.Attributes.GetNamedItem("limit").Value));
+			x1 = int.Parse(teleportNode.Attributes.GetNamedItem("x1").Value);
+			z1 = int.Parse(teleportNode.Attributes.GetNamedItem("z1").Value);
+			x2 = int.Parse(teleportNode.Attributes.GetNamedItem("x2").Value);
+			z2 = int.Parse(teleportNode.Attributes.GetNamedItem("z2").Value);
+			createTeleporter(x1, z1, x2, z2);
 		}
 	}
 

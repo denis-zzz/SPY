@@ -10,6 +10,7 @@ public class CurrentActionExecutor : FSystem {
 	private Family wallGO = FamilyManager.getFamily(new AllOfComponents(typeof(Position)), new AnyOfTags("Wall", "Door"));
 	private Family activableConsoleGO = FamilyManager.getFamily(new AllOfComponents(typeof(Activable),typeof(Position),typeof(AudioSource)));
     private Family newCurrentAction_f = FamilyManager.getFamily(new AllOfComponents(typeof(CurrentAction), typeof(BasicAction)));
+	private Family teleporterGO = FamilyManager.getFamily(new AllOfComponents(typeof(Position), typeof(AudioSource)), new AnyOfTags("Teleporter"));
 
 	public CurrentActionExecutor(){
 		if (Application.isPlaying)
@@ -32,6 +33,21 @@ public class CurrentActionExecutor : FSystem {
 		switch (currentAction.GetComponent<BasicAction>().actionType){
 			case BasicAction.ActionType.Forward:
 				ApplyForward(ca.agent);
+
+				// If marcher sur téléporteur, se téléporter
+				// parse all teleporters
+				foreach (GameObject teleporter in teleporterGO)
+				{
+					// check if positions are equals
+					if (ca.agent.GetComponent<Position>().x == teleporter.GetComponent<Position>().x && ca.agent.GetComponent<Position>().z == teleporter.GetComponent<Position>().z)
+					{
+						Debug.Log("Teleporter stepped on");
+						ca.agent.GetComponent<Position>().x = teleporter.GetComponent<Teleporter>().x2;
+						ca.agent.GetComponent<Position>().z = teleporter.GetComponent<Teleporter>().z2;
+
+
+					}
+				}
 				break;
 			case BasicAction.ActionType.TurnLeft:
 				ApplyTurnLeft(ca.agent);

@@ -107,8 +107,10 @@ public class CurrentActionManager : FSystem
             {
                 // check if this ForAction include a child and nb iteration != 0
                 if (action.GetComponent<ForAction>().firstChild != null && action.GetComponent<ForAction>().nbFor != 0)
+                {
                     // get first action of its first child (could be if, for...)
                     return getFirstActionOf(action.GetComponent<ForAction>().firstChild, agent);
+                }
                 else
                     // this for doesn't contain action or nb iteration == 0 => get first action of next action (could be if, for...)
                     return getFirstActionOf(action.GetComponent<ForAction>().next, agent);
@@ -128,6 +130,16 @@ public class CurrentActionManager : FSystem
             else if (action.GetComponent<ForeverAction>())
                 // always return firstchild of this ForeverAction
                 return getFirstActionOf(action.GetComponent<ForeverAction>().firstChild, agent);
+
+            else if (action.GetComponent<WhileAction>())
+            {
+                if (action.GetComponent<WhileAction>().firstChild != null && whileValid(action.GetComponent<WhileAction>(), agent))
+                {
+                    return getFirstActionOf(action.GetComponent<WhileAction>().firstChild, agent);
+                }
+                else
+                    return getFirstActionOf(action.GetComponent<WhileAction>().next, agent);
+            }
         }
         return null;
     }
@@ -197,6 +209,76 @@ public class CurrentActionManager : FSystem
                     if (go.GetComponent<Position>().x == scripted.GetComponent<Position>().x + vec.x &&
                      go.GetComponent<Position>().z == scripted.GetComponent<Position>().z + vec.y)
                         ifok = !ifAction.ifNot;
+                break;
+        }
+        return ifok;
+    }
+
+    public bool whileValid(WhileAction whileAction, GameObject scripted)
+    {
+        bool ifok = whileAction.ifNot;
+        // get absolute target position depending on player orientation and relative direction to observe
+        Vector2 vec = new Vector2();
+        switch (getDirection(scripted.GetComponent<Direction>().direction, whileAction.ifDirection))
+        {
+            case Direction.Dir.North:
+                vec = new Vector2(0, whileAction.range);
+                break;
+            case Direction.Dir.South:
+                vec = new Vector2(0, -whileAction.range);
+                break;
+            case Direction.Dir.East:
+                vec = new Vector2(whileAction.range, 0);
+                break;
+            case Direction.Dir.West:
+                vec = new Vector2(-whileAction.range, 0);
+                break;
+        }
+
+        // check target position
+        switch (whileAction.ifEntityType)
+        {
+            case 0: // walls
+                foreach (GameObject go in wallGO)
+                    if (go.GetComponent<Position>().x == scripted.GetComponent<Position>().x + vec.x &&
+                     go.GetComponent<Position>().z == scripted.GetComponent<Position>().z + vec.y)
+                        ifok = !whileAction.ifNot;
+                break;
+            case 1: // doors
+                foreach (GameObject go in doorGO)
+                    if (go.GetComponent<Position>().x == scripted.GetComponent<Position>().x + vec.x &&
+                     go.GetComponent<Position>().z == scripted.GetComponent<Position>().z + vec.y)
+                        ifok = !whileAction.ifNot;
+                break;
+            case 2: // ennemies
+                foreach (GameObject go in droneGO)
+                    if (go.GetComponent<Position>().x == scripted.GetComponent<Position>().x + vec.x &&
+                        go.GetComponent<Position>().z == scripted.GetComponent<Position>().z + vec.y)
+                        ifok = !whileAction.ifNot;
+                break;
+            case 3: // allies
+                foreach (GameObject go in playerGO)
+                    if (go.GetComponent<Position>().x == scripted.GetComponent<Position>().x + vec.x &&
+                        go.GetComponent<Position>().z == scripted.GetComponent<Position>().z + vec.y)
+                        ifok = !whileAction.ifNot;
+                break;
+            case 4: // consoles
+                foreach (GameObject go in activableConsoleGO)
+                    if (go.GetComponent<Position>().x == scripted.GetComponent<Position>().x + vec.x &&
+                        go.GetComponent<Position>().z == scripted.GetComponent<Position>().z + vec.y)
+                        ifok = !whileAction.ifNot;
+                break;
+            case 5: // detectors
+                foreach (GameObject go in redDetectorGO)
+                    if (go.GetComponent<Position>().x == scripted.GetComponent<Position>().x + vec.x &&
+                     go.GetComponent<Position>().z == scripted.GetComponent<Position>().z + vec.y)
+                        ifok = !whileAction.ifNot;
+                break;
+            case 6: // coins
+                foreach (GameObject go in coinGO)
+                    if (go.GetComponent<Position>().x == scripted.GetComponent<Position>().x + vec.x &&
+                     go.GetComponent<Position>().z == scripted.GetComponent<Position>().z + vec.y)
+                        ifok = !whileAction.ifNot;
                 break;
         }
         return ifok;
@@ -369,6 +451,41 @@ public class CurrentActionManager : FSystem
                 return getNextAction(foreverAction.firstChild, agent);
         }
 
+        else if (currentAction.GetComponent<WhileAction>())
+        {
+            WhileAction WhileAct = currentAction.GetComponent<WhileAction>();
+
+            if (!(WhileAct.firstChild != null && whileValid(WhileAct, agent)))
+            {
+                // return next action
+                if (WhileAct.next == null || WhileAct.next.GetComponent<BasicAction>())
+                    return WhileAct.next;
+                else
+                    return getNextAction(WhileAct.next, agent);
+            }
+            // iteration are available
+            else
+            {
+                // in case ForAction has no child
+                if (WhileAct.firstChild == null)
+                {
+                    // return next action
+                    if (WhileAct.next == null || WhileAct.next.GetComponent<BasicAction>())
+                        return WhileAct.next;
+                    else
+                        return getNextAction(WhileAct.next, agent);
+                }
+                else
+                // return first child
+                {
+                    // return first child
+                    if (WhileAct.firstChild.GetComponent<BasicAction>())
+                        return WhileAct.firstChild;
+                    else
+                        return getNextAction(WhileAct.firstChild, agent);
+                }
+            }
+        }
         return null;
     }
 

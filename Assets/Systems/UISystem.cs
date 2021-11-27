@@ -235,6 +235,8 @@ public class UISystem : FSystem
                 go.GetComponent<UIActionType>().linkedTo = GameObject.Find("If");
             else if (go.GetComponent<ForAction>())
                 go.GetComponent<UIActionType>().linkedTo = GameObject.Find("For");
+            else if (go.GetComponent<WhileAction>())
+                go.GetComponent<UIActionType>().linkedTo = GameObject.Find("While");
         }
     }
 
@@ -653,6 +655,22 @@ public class UISystem : FSystem
                 if (!act.Equals(IfAct))
                 {
                     IfAct.firstChild = act.gameObject;
+                    break;
+                }
+            }
+        }
+
+        foreach (WhileAction WhileAct in copyGO.GetComponentsInChildren<WhileAction>())
+        {
+            WhileAct.ifEntityType = WhileAct.transform.GetChild(0).Find("DropdownEntityType").GetComponent<TMP_Dropdown>().value;
+            WhileAct.ifDirection = WhileAct.transform.GetChild(0).Find("DropdownDirection").GetComponent<TMP_Dropdown>().value;
+            WhileAct.range = int.Parse(WhileAct.transform.GetChild(0).Find("InputFieldRange").GetComponent<TMP_InputField>().text);
+            WhileAct.ifNot = (WhileAct.transform.GetChild(0).Find("DropdownIsOrIsNot").GetComponent<TMP_Dropdown>().value == 1);
+            foreach (BaseElement act in WhileAct.GetComponentsInChildren<BaseElement>())
+            {
+                if (!act.Equals(WhileAct))
+                {
+                    WhileAct.firstChild = act.gameObject;
                     break;
                 }
             }

@@ -77,15 +77,4 @@ public class SendStatements : FSystem {
             }
         }
 	}
-
-    public void testSendStatement()
-    {
-        Debug.Log(GBL_Interface.playerName + " asks to send statement...");
-        GameObjectManager.addComponent<ActionPerformedForLRS>(MainLoop.instance.gameObject, new
-        {
-            verb = "interacted",
-            objectType = "menu",
-            objectName = "myButton"
-        });
-    }
 }

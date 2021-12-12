@@ -570,13 +570,13 @@ public class LevelGenerator : FSystem
             }
             else if (i == container.transform.childCount - 1 && child.GetComponent<BaseElement>() && container.GetComponent<BaseElement>())
             {
-                if (container.GetComponent<ForAction>() || container.GetComponent<ForeverAction>())
+                if (container.GetComponent<ForAction>() || container.GetComponent<ForeverAction>() || container.GetComponent<WhileAction>())
                     child.GetComponent<BaseElement>().next = container;
                 else if (container.GetComponent<IfAction>())
                     child.GetComponent<BaseElement>().next = container.GetComponent<BaseElement>().next;
             }
             //if or for action
-            if (child.GetComponent<IfAction>() || child.GetComponent<ForAction>() || child.GetComponent<ForeverAction>())
+            if (child.GetComponent<IfAction>() || child.GetComponent<ForAction>() || child.GetComponent<ForeverAction>() || child.GetComponent<WhileAction>())
                 computeNext(child.gameObject);
         }
     }

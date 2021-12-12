@@ -14,9 +14,4 @@ public class SendStatements_wrapper : MonoBehaviour
 		MainLoop.callAppropriateSystemMethod ("SendStatements", "initGBLXAPI", null);
 	}
 
-	public void testSendStatement()
-	{
-		MainLoop.callAppropriateSystemMethod ("SendStatements", "testSendStatement", null);
-	}
-
 }

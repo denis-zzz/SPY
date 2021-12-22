@@ -16,7 +16,7 @@ public class LevelGenerator : FSystem
     private Family levelGO = FamilyManager.getFamily(new AnyOfComponents(typeof(Position), typeof(CurrentAction)));
     private Family enemyScript = FamilyManager.getFamily(new AllOfComponents(typeof(HorizontalLayoutGroup), typeof(CanvasRenderer)), new NoneOfComponents(typeof(Image)));
     private Family editableScriptContainer = FamilyManager.getFamily(new AllOfComponents(typeof(UITypeContainer), typeof(VerticalLayoutGroup), typeof(CanvasRenderer), typeof(PointerSensitive)));
-    private Family teleporterGO = FamilyManager.getFamily(new AllOfComponents(typeof(Position), typeof(Teleporter), typeof(AudioSource)), new AnyOfTags("Teleporter"));
+    private Family teleporterGO = FamilyManager.getFamily(new AllOfComponents(typeof(Position), typeof(Teleporter), typeof(Solution), typeof(AudioSource)), new AnyOfTags("Teleporter"));
     private List<List<int>> map;
     private GameData gameData;
     private GameObject scriptContainer;
@@ -97,20 +97,35 @@ public class LevelGenerator : FSystem
 
         if (script != null)
         {
+            /*Comment faire :
+         Cr?er un nouveau syst?me DynamicCanvas avec le code en dessous, Dans system Dynamic Canvas=> famille allOfComponent (typeof(XMLTarget))
+        Composant XMLTarget {type:String, script:List<GO>(); ...}
+        Dans le systeme DynamicCanvas, faire la fonction pour ajouter les instructions dans le canvas. Faire pour qu'elle s'ex?cute d?s qu'on g?n?re un component XMLTarget (grace ? addEntryCallback)
+        D?s qu'on a fini la fonction, il faut supprimer le composant, sinon addEntryCallback ne se r?execute pas ? la prochaine cr?ation de composant
+
+        Du coup ici, on aura juste :
+            GameObjectManager.addComponent<XMLTarget>(containerParent, { type = type; script = script; ... })
+
+
+
+         */
+
             if (type == "player" && editableScriptContainer.First().transform.childCount == 1)
             { //player & empty script (1 child for position bar)
                 GameObject editableCanvas = editableScriptContainer.First();
-                for (int k = 0; k < script.Count; k++)
-                {
-                    script[k].transform.SetParent(editableCanvas.transform); //add actions to editable container
-                    GameObjectManager.bind(script[k]);
-                    GameObjectManager.refresh(editableCanvas);
-                }
-                foreach (BaseElement act in editableCanvas.GetComponentsInChildren<BaseElement>())
-                {
-                    GameObjectManager.addComponent<Dropped>(act.gameObject);
-                }
-                LayoutRebuilder.ForceRebuildLayoutImmediate(editableCanvas.GetComponent<RectTransform>());
+                /*                for (int k = 0; k < script.Count; k++)
+                                {
+                                    script[k].transform.SetParent(editableCanvas.transform); //add actions to editable container
+                                    GameObjectManager.bind(script[k]);
+                                    GameObjectManager.refresh(editableCanvas);
+                                }
+                                foreach (BaseElement act in editableCanvas.GetComponentsInChildren<BaseElement>())
+                                {
+                                    GameObjectManager.addComponent<Dropped>(act.gameObject);
+                                }
+                                LayoutRebuilder.ForceRebuildLayoutImmediate(editableCanvas.GetComponent<RectTransform>());*/
+                GameObjectManager.addComponent<EditableCanvas>(editableCanvas, new { script = script });
+
             }
 
             else if (type == "enemy")
@@ -188,15 +203,34 @@ public class LevelGenerator : FSystem
         GameObjectManager.bind(spawnExit);
     }
 
-    private void createTeleporter(int x1, int z1, int x2, int z2)
+    private void createTeleporter(int x1, int z1, int x2, int z2, int direction, List<GameObject> solution = null)
     {
         GameObject teleporter;
-        teleporter = Object.Instantiate<GameObject>(Resources.Load("Prefabs/Teleporter") as GameObject, gameData.Level.transform.position + new Vector3(x1 * 3, 1.5f, z1 * 3), Quaternion.Euler(-90, 0, 0), gameData.Level.transform);
+        if (solution != null)
+        {
+            teleporter = Object.Instantiate<GameObject>(Resources.Load("Prefabs/TeleporterSolution") as GameObject, gameData.Level.transform.position + new Vector3(x1 * 3, 1.5f, z1 * 3), Quaternion.Euler(-90, 0, 0), gameData.Level.transform);
+        }
+        else
+        {
+            teleporter = Object.Instantiate<GameObject>(Resources.Load("Prefabs/Teleporter") as GameObject, gameData.Level.transform.position + new Vector3(x1 * 3, 1.5f, z1 * 3), Quaternion.Euler(-90, 0, 0), gameData.Level.transform);
+        }
+
 
         teleporter.GetComponent<Position>().x = x1;
         teleporter.GetComponent<Position>().z = z1;
         teleporter.GetComponent<Teleporter>().x2 = x2;
         teleporter.GetComponent<Teleporter>().z2 = z2;
+        teleporter.GetComponent<Teleporter>().direction = direction;
+        Debug.Log("VALEUR DE SOLUTION2 " + solution);
+/*        if (solution != null)
+        {
+            teleporter.GetComponent<Solution>().solution = solution;
+        }
+        else
+        {
+            teleporter.GetComponent<Solution>().solution = null;
+        }*/
+
         GameObjectManager.bind(teleporter);
     }
 
@@ -330,20 +364,28 @@ public class LevelGenerator : FSystem
             }
         }
     }
+
     private void readXMLTeleporters(XmlNode teleportersNode)
     {
         int x1;
         int z1;
         int x2;
         int z2;
+        int direction;
+        List<GameObject> solution;
         foreach (XmlNode teleportNode in teleportersNode.ChildNodes)
         {
-            //gameData.actionBlocLimit.Add(int.Parse(limitNode.Attributes.GetNamedItem("limit").Value));
+            solution = null;
+
             x1 = int.Parse(teleportNode.Attributes.GetNamedItem("x1").Value);
             z1 = int.Parse(teleportNode.Attributes.GetNamedItem("z1").Value);
             x2 = int.Parse(teleportNode.Attributes.GetNamedItem("x2").Value);
             z2 = int.Parse(teleportNode.Attributes.GetNamedItem("z2").Value);
-            createTeleporter(x1, z1, x2, z2);
+            direction = int.Parse(teleportNode.Attributes.GetNamedItem("direction").Value);
+            solution = readXMLScript(teleportNode.ChildNodes[0], true);
+            Debug.Log("VALEUR DE SOLUTION : " + solution);
+            Debug.Log(solution == null);
+            createTeleporter(x1, z1, x2, z2, direction, solution);
         }
     }
 

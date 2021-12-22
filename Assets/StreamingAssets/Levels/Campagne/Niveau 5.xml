@@ -7,23 +7,27 @@
       <row value="1" />
       <row value="1" />
       <row value="1" />
-    </line>
-    <line>
-      <row value="1" />
-      <row value="0" />
-      <row value="0" />
-      <row value="0" />
       <row value="1" />
     </line>
     <line>
       <row value="1" />
-      <row value="0" />
       <row value="1" />
+      <row value="0" />
+      <row value="0" />
       <row value="0" />
       <row value="1" />
     </line>
     <line>
       <row value="1" />
+      <row value="1" />
+      <row value="0" />
+      <row value="1" />
+      <row value="0" />
+      <row value="1" />
+    </line>
+    <line>
+      <row value="1" />
+      <row value="0" />
       <row value="2" />
       <row value="1" />
       <row value="3" />
@@ -35,8 +39,12 @@
       <row value="1" />
       <row value="1" />
       <row value="1" />
+      <row value="1" />
     </line>
   </map>
+  <teleporters>
+    <teleporter x1="2" z1="2" x2 ="2" z2="4" direction="2"/>
+  </teleporters>
   <actionBlocLimit>
     <limit actionType="Forward" limit="-1" />
     <limit actionType="TurnLeft" limit="-1" />
@@ -46,8 +54,7 @@
     <limit actionType="TurnBack" limit="0" />
     <limit actionType="If" limit="0" />
     <limit actionType="For" limit="0" />
-	<limit actionType="While" limit="0" />
   </actionBlocLimit>
-  <player posX="3" posZ="1" direction="3" />
+  <player posX="3" posZ="2" direction="3" />
   <score twoStars="3666" threeStars="4666"/>
 </level>

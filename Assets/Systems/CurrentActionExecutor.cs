@@ -2,6 +2,7 @@
 using FYFY;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 
 /// <summary>
 /// This system executes new currentActions
@@ -11,43 +12,70 @@ public class CurrentActionExecutor : FSystem {
 	private Family activableConsoleGO = FamilyManager.getFamily(new AllOfComponents(typeof(Activable),typeof(Position),typeof(AudioSource)));
     private Family newCurrentAction_f = FamilyManager.getFamily(new AllOfComponents(typeof(CurrentAction), typeof(BasicAction)));
 	private Family teleporterGO = FamilyManager.getFamily(new AllOfComponents(typeof(Position), typeof(AudioSource)), new AnyOfTags("Teleporter"));
+	private Family editableScriptContainer = FamilyManager.getFamily(new AllOfComponents(typeof(UITypeContainer), typeof(VerticalLayoutGroup), typeof(CanvasRenderer)));
 
+	private Dictionary<int, GameObject> idToAgent;
 	public CurrentActionExecutor(){
 		if (Application.isPlaying)
 		{
+			newCurrentAction_f.addExitCallback(onOldCurrentAction);
 			newCurrentAction_f.addEntryCallback(onNewCurrentAction);
+			// newCurrentAction_f.addExitCallback(onNewCurrentAction);
+			idToAgent = new Dictionary<int, GameObject>();
 		}
     }
 
+	private void onOldCurrentAction(int uniqueId)
+	{
+		GameObject agent = idToAgent[uniqueId];
+		// parse all teleporters
+		foreach (GameObject teleporter in teleporterGO)
+		{
+			// check if positions are equals
+			if (agent.GetComponent<Position>().x == teleporter.GetComponent<Position>().x && agent.GetComponent<Position>().z == teleporter.GetComponent<Position>().z)
+			{
+				Debug.Log("Teleporter stepped on");
+				agent.GetComponent<Position>().x = teleporter.GetComponent<Teleporter>().x2;
+				agent.GetComponent<Position>().z = teleporter.GetComponent<Teleporter>().z2;
+				if (teleporter.GetComponent<Teleporter>().direction != 4)
+				{
+					agent.GetComponent<Direction>().direction = (Direction.Dir)teleporter.GetComponent<Teleporter>().direction;
+
+				}
+				agent.transform.localPosition = new Vector3(agent.GetComponent<Position>().x * 3, agent.transform.localPosition.y, agent.GetComponent<Position>().z * 3);
+
+				if (teleporter.GetComponent<Solution>().solution != null)
+				{
+					// Vider la pile d'instructions et charger la solution
+					GameObject editableCanvas = editableScriptContainer.First();
+					GameObjectManager.addComponent<EditableCanvas>(editableCanvas, new { script = teleporter.GetComponent<Solution>().solution });
+				}
+
+			}
+		}
+	}
 	// each time a new currentAction is added, 
-	private void onNewCurrentAction(GameObject currentAction) {
-		CurrentAction ca = currentAction.GetComponent<CurrentAction>();	
-		if(ca.agent.CompareTag("Player")){
+	private void onNewCurrentAction(GameObject currentAction)
+	{
+		CurrentAction ca = currentAction.GetComponent<CurrentAction>();
+		idToAgent.Add(currentAction.GetInstanceID(), ca.agent);
+		if (ca.agent.CompareTag("Player"))
+		{
 			// We notify that player is moving
-			if(!MainLoop.instance.gameObject.GetComponent<PlayerIsMoving>()){
+			if (!MainLoop.instance.gameObject.GetComponent<PlayerIsMoving>())
+			{
 				GameObjectManager.addComponent<PlayerIsMoving>(MainLoop.instance.gameObject);
 			}
 		}
 
 		// process action depending on action type
-		switch (currentAction.GetComponent<BasicAction>().actionType){
+		switch (currentAction.GetComponent<BasicAction>().actionType)
+		{
 			case BasicAction.ActionType.Forward:
 				ApplyForward(ca.agent);
-
+				Debug.Log("Forward command executed");
 				// If marcher sur téléporteur, se téléporter
-				// parse all teleporters
-				foreach (GameObject teleporter in teleporterGO)
-				{
-					// check if positions are equals
-					if (ca.agent.GetComponent<Position>().x == teleporter.GetComponent<Position>().x && ca.agent.GetComponent<Position>().z == teleporter.GetComponent<Position>().z)
-					{
-						Debug.Log("Teleporter stepped on");
-						ca.agent.GetComponent<Position>().x = teleporter.GetComponent<Teleporter>().x2;
-						ca.agent.GetComponent<Position>().z = teleporter.GetComponent<Teleporter>().z2;
 
-
-					}
-				}
 				break;
 			case BasicAction.ActionType.TurnLeft:
 				ApplyTurnLeft(ca.agent);
@@ -61,8 +89,10 @@ public class CurrentActionExecutor : FSystem {
 			case BasicAction.ActionType.Wait:
 				break;
 			case BasicAction.ActionType.Activate:
-				foreach( GameObject actGo in activableConsoleGO){
-					if(actGo.GetComponent<Position>().x == ca.agent.GetComponent<Position>().x && actGo.GetComponent<Position>().z == ca.agent.GetComponent<Position>().z){
+				foreach (GameObject actGo in activableConsoleGO)
+				{
+					if (actGo.GetComponent<Position>().x == ca.agent.GetComponent<Position>().x && actGo.GetComponent<Position>().z == ca.agent.GetComponent<Position>().z)
+					{
 						actGo.GetComponent<AudioSource>().Play();
 						// toggle activable GameObject
 						if (actGo.GetComponent<TurnedOn>())

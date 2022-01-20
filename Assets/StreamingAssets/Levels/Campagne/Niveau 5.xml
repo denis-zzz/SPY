@@ -43,7 +43,10 @@
     </line>
   </map>
   <teleporters>
-    <teleporter x1="2" z1="2" x2 ="2" z2="4" direction="2"/>
+    <teleporter x1="2" z1="2" x2 ="2" z2="4" direction="4">
+      <script>
+      </script>
+    </teleporter>
   </teleporters>
   <actionBlocLimit>
     <limit actionType="Forward" limit="-1" />
@@ -56,5 +59,17 @@
     <limit actionType="For" limit="0" />
   </actionBlocLimit>
   <player posX="3" posZ="2" direction="3" />
+  <solution x1="3" z1="1" x2 ="3" z2="2" direction ="3">
+    <script>
+      <action actionType="Forward"/>
+      <action actionType="Forward"/>
+      <action actionType="TurnRight"/>
+      <action actionType="Forward"/>
+      <action actionType="Forward"/>
+      <action actionType="TurnRight"/>
+      <action actionType="Forward"/>
+      <action actionType="Forward"/>
+    </script>
+  </solution>
   <score twoStars="3666" threeStars="4666"/>
 </level>

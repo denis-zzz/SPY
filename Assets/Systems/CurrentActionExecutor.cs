@@ -12,6 +12,7 @@ public class CurrentActionExecutor : FSystem {
 	private Family activableConsoleGO = FamilyManager.getFamily(new AllOfComponents(typeof(Activable),typeof(Position),typeof(AudioSource)));
     private Family newCurrentAction_f = FamilyManager.getFamily(new AllOfComponents(typeof(CurrentAction), typeof(BasicAction)));
 	private Family teleporterGO = FamilyManager.getFamily(new AllOfComponents(typeof(Position), typeof(AudioSource)), new AnyOfTags("Teleporter"));
+	private Family solutionGO = FamilyManager.getFamily(new AnyOfTags("Solution"));
 	private Family editableScriptContainer = FamilyManager.getFamily(new AllOfComponents(typeof(UITypeContainer), typeof(VerticalLayoutGroup), typeof(CanvasRenderer)));
 
 	private Dictionary<int, GameObject> idToAgent;
@@ -27,6 +28,7 @@ public class CurrentActionExecutor : FSystem {
 
 	private void onOldCurrentAction(int uniqueId)
 	{
+		GameObject solutionItem = solutionGO.First();
 		GameObject agent = idToAgent[uniqueId];
 		// parse all teleporters
 		foreach (GameObject teleporter in teleporterGO)
@@ -43,16 +45,22 @@ public class CurrentActionExecutor : FSystem {
 
 				}
 				agent.transform.localPosition = new Vector3(agent.GetComponent<Position>().x * 3, agent.transform.localPosition.y, agent.GetComponent<Position>().z * 3);
-
-				if (teleporter.GetComponent<Solution>().solution != null)
-				{
-					// Vider la pile d'instructions et charger la solution
-					GameObject editableCanvas = editableScriptContainer.First();
-					GameObjectManager.addComponent<EditableCanvas>(editableCanvas, new { script = teleporter.GetComponent<Solution>().solution });
-				}
-
 			}
 		}
+		if (agent.GetComponent<Position>().x == solutionItem.GetComponent<Position>().x && agent.GetComponent<Position>().z == solutionItem.GetComponent<Position>().z)
+		{
+			GameObject go = solutionItem.GetComponent<ScriptRef>().uiContainer;
+			GameObjectManager.setGameObjectState(go, !go.activeInHierarchy);
+			agent.GetComponent<Position>().x = solutionItem.GetComponent<Teleporter>().x2;
+			agent.GetComponent<Position>().z = solutionItem.GetComponent<Teleporter>().z2;
+			if (solutionItem.GetComponent<Teleporter>().direction != 4)
+			{
+				agent.GetComponent<Direction>().direction = (Direction.Dir)solutionItem.GetComponent<Teleporter>().direction;
+
+			}
+			agent.transform.localPosition = new Vector3(agent.GetComponent<Position>().x * 3, agent.transform.localPosition.y, agent.GetComponent<Position>().z * 3);
+		}
+
 	}
 	// each time a new currentAction is added, 
 	private void onNewCurrentAction(GameObject currentAction)

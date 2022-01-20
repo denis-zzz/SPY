@@ -13,6 +13,8 @@ TagManager:
   - Wall
   - endpanel
   - Door
+  - Teleporter
+  - Solution
   layers:
   - Default
   - TransparentFX

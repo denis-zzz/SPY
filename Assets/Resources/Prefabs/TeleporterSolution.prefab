@@ -19,9 +19,11 @@ GameObject:
   - component: {fileID: 8200000}
   - component: {fileID: -3075638957997508507}
   - component: {fileID: -4384851041592550924}
+  - component: {fileID: 5010266687243552697}
+  - component: {fileID: 1347899334190032693}
   m_Layer: 8
   m_Name: TeleporterSolution
-  m_TagString: Teleporter
+  m_TagString: Solution
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5123,3 +5125,32 @@ MonoBehaviour:
   x2: 0
   z2: 0
   direction: 0
+--- !u!114 &5010266687243552697
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f089d21d00876544a363bf4d5be9ed4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  solution: []
+--- !u!114 &1347899334190032693
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 884027c6c0273814ebb677a51949b7db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scriptContainer: {fileID: 0}
+  uiContainer: {fileID: 0}
+  currentAction: 0
+  scriptFinished: 0

@@ -16,7 +16,6 @@ public class LevelGenerator : FSystem
     private Family levelGO = FamilyManager.getFamily(new AnyOfComponents(typeof(Position), typeof(CurrentAction)));
     private Family enemyScript = FamilyManager.getFamily(new AllOfComponents(typeof(HorizontalLayoutGroup), typeof(CanvasRenderer)), new NoneOfComponents(typeof(Image)));
     private Family editableScriptContainer = FamilyManager.getFamily(new AllOfComponents(typeof(UITypeContainer), typeof(VerticalLayoutGroup), typeof(CanvasRenderer), typeof(PointerSensitive)));
-    private Family teleporterGO = FamilyManager.getFamily(new AllOfComponents(typeof(Position), typeof(Teleporter), typeof(Solution), typeof(AudioSource)), new AnyOfTags("Teleporter"));
     private List<List<int>> map;
     private GameData gameData;
     private GameObject scriptContainer;
@@ -79,10 +78,17 @@ public class LevelGenerator : FSystem
                 entity = Object.Instantiate<GameObject>(Resources.Load("Prefabs/Drone") as GameObject, gameData.Level.transform.position + new Vector3(i * 3, 5f, j * 3), Quaternion.Euler(0, 0, 0), gameData.Level.transform);
                 agentSpriteIcon = Resources.Load("UI Images/droneIcon", typeof(Sprite)) as Sprite;
                 break;
+            case "solution":
+                entity = Object.Instantiate<GameObject>(Resources.Load("Prefabs/TeleporterSolution") as GameObject, gameData.Level.transform.position + new Vector3(i * 3, 1.5f, j * 3), Quaternion.Euler(-90, 0, 0), gameData.Level.transform);
+                break;
         }
         entity.GetComponent<Position>().x = i;
         entity.GetComponent<Position>().z = j;
-        entity.GetComponent<Direction>().direction = direction;
+
+        if (type != "solution")
+        {
+            entity.GetComponent<Direction>().direction = direction;
+        }
 
         //add new container to entity
         ScriptRef scriptref = entity.GetComponent<ScriptRef>();
@@ -113,18 +119,18 @@ public class LevelGenerator : FSystem
             if (type == "player" && editableScriptContainer.First().transform.childCount == 1)
             { //player & empty script (1 child for position bar)
                 GameObject editableCanvas = editableScriptContainer.First();
-                /*                for (int k = 0; k < script.Count; k++)
-                                {
-                                    script[k].transform.SetParent(editableCanvas.transform); //add actions to editable container
-                                    GameObjectManager.bind(script[k]);
-                                    GameObjectManager.refresh(editableCanvas);
-                                }
-                                foreach (BaseElement act in editableCanvas.GetComponentsInChildren<BaseElement>())
-                                {
-                                    GameObjectManager.addComponent<Dropped>(act.gameObject);
-                                }
-                                LayoutRebuilder.ForceRebuildLayoutImmediate(editableCanvas.GetComponent<RectTransform>());*/
-                GameObjectManager.addComponent<EditableCanvas>(editableCanvas, new { script = script });
+                for (int k = 0; k < script.Count; k++)
+                {
+                    script[k].transform.SetParent(editableCanvas.transform); //add actions to editable container
+                    GameObjectManager.bind(script[k]);
+                    GameObjectManager.refresh(editableCanvas);
+                }
+                foreach (BaseElement act in editableCanvas.GetComponentsInChildren<BaseElement>())
+                {
+                    GameObjectManager.addComponent<Dropped>(act.gameObject);
+                }
+                LayoutRebuilder.ForceRebuildLayoutImmediate(editableCanvas.GetComponent<RectTransform>());
+                /*GameObjectManager.addComponent<EditableCanvas>(editableCanvas, new { script = script });*/
 
             }
 
@@ -140,7 +146,13 @@ public class LevelGenerator : FSystem
                 }
                 computeNext(scriptref.scriptContainer);
             }
-
+            else if (type == "solution")
+            {
+                foreach (GameObject go in script)
+                {
+                    go.transform.SetParent(scriptref.scriptContainer.transform); //add actions to container
+                }
+            }
         }
         GameObjectManager.bind(containerParent);
         GameObjectManager.bind(entity);
@@ -203,17 +215,12 @@ public class LevelGenerator : FSystem
         GameObjectManager.bind(spawnExit);
     }
 
-    private void createTeleporter(int x1, int z1, int x2, int z2, int direction, List<GameObject> solution = null)
+    private void createTeleporter(int x1, int z1, int x2, int z2, int direction)
     {
         GameObject teleporter;
-        if (solution != null)
-        {
-            teleporter = Object.Instantiate<GameObject>(Resources.Load("Prefabs/TeleporterSolution") as GameObject, gameData.Level.transform.position + new Vector3(x1 * 3, 1.5f, z1 * 3), Quaternion.Euler(-90, 0, 0), gameData.Level.transform);
-        }
-        else
-        {
-            teleporter = Object.Instantiate<GameObject>(Resources.Load("Prefabs/Teleporter") as GameObject, gameData.Level.transform.position + new Vector3(x1 * 3, 1.5f, z1 * 3), Quaternion.Euler(-90, 0, 0), gameData.Level.transform);
-        }
+
+        teleporter = Object.Instantiate<GameObject>(Resources.Load("Prefabs/Teleporter") as GameObject, gameData.Level.transform.position + new Vector3(x1 * 3, 1.5f, z1 * 3), Quaternion.Euler(-90, 0, 0), gameData.Level.transform);
+
 
 
         teleporter.GetComponent<Position>().x = x1;
@@ -221,15 +228,6 @@ public class LevelGenerator : FSystem
         teleporter.GetComponent<Teleporter>().x2 = x2;
         teleporter.GetComponent<Teleporter>().z2 = z2;
         teleporter.GetComponent<Teleporter>().direction = direction;
-        Debug.Log("VALEUR DE SOLUTION2 " + solution);
-/*        if (solution != null)
-        {
-            teleporter.GetComponent<Solution>().solution = solution;
-        }
-        else
-        {
-            teleporter.GetComponent<Solution>().solution = null;
-        }*/
 
         GameObjectManager.bind(teleporter);
     }
@@ -325,6 +323,13 @@ public class LevelGenerator : FSystem
                     enemy.GetComponent<DetectRange>().type = (DetectRange.Type)int.Parse(child.Attributes.GetNamedItem("typeRange").Value);
                     break;
 
+                case "solution":
+                    GameObject solution = createEntity(int.Parse(child.Attributes.GetNamedItem("x1").Value), int.Parse(child.Attributes.GetNamedItem("z1").Value),
+                    (Direction.Dir)int.Parse(child.Attributes.GetNamedItem("direction").Value), "solution", readXMLScript(child.ChildNodes[0]));
+                    solution.GetComponent<Teleporter>().x2 = int.Parse(child.Attributes.GetNamedItem("x2").Value);
+                    solution.GetComponent<Teleporter>().z2 = int.Parse(child.Attributes.GetNamedItem("z2").Value);
+                    break;
+
                 case "score":
                     gameData.levelToLoadScore = new int[2];
                     gameData.levelToLoadScore[0] = int.Parse(child.Attributes.GetNamedItem("threeStars").Value);
@@ -372,20 +377,15 @@ public class LevelGenerator : FSystem
         int x2;
         int z2;
         int direction;
-        List<GameObject> solution;
         foreach (XmlNode teleportNode in teleportersNode.ChildNodes)
         {
-            solution = null;
 
             x1 = int.Parse(teleportNode.Attributes.GetNamedItem("x1").Value);
             z1 = int.Parse(teleportNode.Attributes.GetNamedItem("z1").Value);
             x2 = int.Parse(teleportNode.Attributes.GetNamedItem("x2").Value);
             z2 = int.Parse(teleportNode.Attributes.GetNamedItem("z2").Value);
             direction = int.Parse(teleportNode.Attributes.GetNamedItem("direction").Value);
-            solution = readXMLScript(teleportNode.ChildNodes[0], true);
-            Debug.Log("VALEUR DE SOLUTION : " + solution);
-            Debug.Log(solution == null);
-            createTeleporter(x1, z1, x2, z2, direction, solution);
+            createTeleporter(x1, z1, x2, z2, direction);
         }
     }
 

@@ -13,7 +13,6 @@ public class CurrentActionExecutor : FSystem {
     private Family newCurrentAction_f = FamilyManager.getFamily(new AllOfComponents(typeof(CurrentAction), typeof(BasicAction)));
 	private Family teleporterGO = FamilyManager.getFamily(new AllOfComponents(typeof(Position), typeof(AudioSource)), new AnyOfTags("Teleporter"));
 	private Family solutionGO = FamilyManager.getFamily(new AnyOfTags("Solution"));
-	private Family editableScriptContainer = FamilyManager.getFamily(new AllOfComponents(typeof(UITypeContainer), typeof(VerticalLayoutGroup), typeof(CanvasRenderer)));
 
 	private Dictionary<int, GameObject> idToAgent;
 	public CurrentActionExecutor(){

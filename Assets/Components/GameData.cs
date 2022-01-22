@@ -6,7 +6,10 @@ public class GameData : MonoBehaviour
     // Advice: FYFY component aims to contain only public members (according to Entity-Component-System paradigm).
     public GameObject Level;
     public Dictionary<string, List<string>> levelList; //key = directory name, value = list of level file name
+    public Dictionary<string, List<string>> skillList;
     public (string, int) levelToLoad = ("Campagne", 1); //directory name, level index
+    public List<int> completed_levels = new List<int>() { 0 };
+    public (string, string) skillCurrent = ("Campagne", "m");
     public int[] levelToLoadScore; //levelToLoadScore[0] = best score (3 stars) ; levelToLoadScore[1] = medium score (2 stars)
     public float bestTime;
     public int minAction;
@@ -23,5 +26,5 @@ public class GameData : MonoBehaviour
     public bool timer_paused = true;
 
     public Dictionary<string, List<string>> dependency_dict = new Dictionary<string, List<string>>();
-    public static Dictionary<string, List<string>> cbkst_dict = new Dictionary<string, List<string>>();
+    public Dictionary<string, List<string>> cbkst_dict = new Dictionary<string, List<string>>();
 }

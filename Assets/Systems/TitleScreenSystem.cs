@@ -25,6 +25,7 @@ public class TitleScreenSystem : FSystem
         {
             gameData = GameObject.Find("GameData").GetComponent<GameData>();
             gameData.levelList = new Dictionary<string, List<string>>();
+            gameData.skillList = new Dictionary<string, List<string>>();
             campagneMenu = GameObject.Find("CampagneMenu");
             playButton = GameObject.Find("Jouer");
             quitButton = GameObject.Find("Quitter");
@@ -38,12 +39,18 @@ public class TitleScreenSystem : FSystem
             GameObjectManager.setGameObjectState(backButton, false);
             string levelsPath = Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Levels";
             List<string> levels;
+            List<string> skills;
             foreach (string directory in Directory.GetDirectories(levelsPath))
             {
                 levels = readScenario(directory);
                 if (levels != null)
                 {
                     gameData.levelList[Path.GetFileName(directory)] = levels; //key = directory name
+                }
+                skills = readSkill(directory);
+                if (skills != null)
+                {
+                    gameData.skillList[Path.GetFileName(directory)] = skills;
                 }
             }
 
@@ -76,6 +83,7 @@ public class TitleScreenSystem : FSystem
         if (File.Exists(repositoryPath + Path.DirectorySeparatorChar + "Scenario.xml"))
         {
             List<string> levelList = new List<string>();
+
             XmlDocument doc = new XmlDocument();
             doc.Load(repositoryPath + Path.DirectorySeparatorChar + "Scenario.xml");
             XmlNode root = doc.ChildNodes[1]; //root = <scenario/>
@@ -87,6 +95,26 @@ public class TitleScreenSystem : FSystem
                 }
             }
             return levelList;
+        }
+        return null;
+    }
+
+    private List<string> readSkill(string repositoryPath)
+    {
+        if (File.Exists(repositoryPath + Path.DirectorySeparatorChar + "Scenario.xml"))
+        {
+            List<string> skillList = new List<string>();
+            XmlDocument doc = new XmlDocument();
+            doc.Load(repositoryPath + Path.DirectorySeparatorChar + "Scenario.xml");
+            XmlNode root = doc.ChildNodes[1]; //root = <scenario/>
+            foreach (XmlNode child in root.ChildNodes)
+            {
+                if (child.Name.Equals("skill"))
+                {
+                    skillList.Add(repositoryPath + Path.DirectorySeparatorChar + (child.Attributes.GetNamedItem("name").Value));
+                }
+            }
+            return skillList;
         }
         return null;
     }
@@ -135,8 +163,8 @@ public class TitleScreenSystem : FSystem
 
                     string directoryName = levelDirectory.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text;
                     //locked levels
-                    if (i > PlayerPrefs.GetInt(directoryName, 0)) //by default first level of directory is the only unlocked level of directory
-                        levelButtons[directory][i].transform.Find("Button").GetComponent<Button>().interactable = true;
+                    if (gameData.completed_levels.Contains(i) == false) //by default first level of directory is the only unlocked level of directory
+                        levelButtons[directory][i].transform.Find("Button").GetComponent<Button>().interactable = false;
                     //unlocked levels
                     else
                     {

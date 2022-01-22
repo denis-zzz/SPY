@@ -21,4 +21,26 @@
     <level name = "Niveau 19.xml" />
     <level name = "Niveau 20.xml" />
     <level name = "Niveau 21.xml" />
+
+    <skill name = "m" />
+    <skill name = "m" />
+    <skill name = "m" />
+    <skill name = "m" />
+    <skill name = "m" />
+    <skill name = "m" />
+    <skill name = "m" />
+    <skill name = "m" />
+    <skill name = "m" />
+    <skill name = "m" />
+    <skill name = "m" />
+    <skill name = "m,f" />
+    <skill name = "m,f" />
+    <skill name = "m" />
+    <skill name = "m" />
+    <skill name = "m" />
+    <skill name = "m,i,f" />
+    <skill name = "m,i,f" />
+    <skill name = "m,i,f" />
+    <skill name = "m,i,f" />
+    <skill name = "m,f" />
 </scenario>

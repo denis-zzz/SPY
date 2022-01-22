@@ -8,7 +8,7 @@ using System.IO;
 
 public class CbkstSystem : FSystem
 {
-    private GameData gameData;
+    private static GameData gameData;
     public CbkstSystem()
     {
         if (Application.isPlaying)
@@ -23,8 +23,6 @@ public class CbkstSystem : FSystem
 
             build_dependance_dict_from_XML(treePath);
             build_cbkst_dict(gameData.dependency_dict);
-
-            Debug.Log("test");
         }
     }
 
@@ -60,44 +58,43 @@ public class CbkstSystem : FSystem
         recurse_list(skills, gameData.dependency_dict);
     }
 
-    private void recurse_list(List<string> skills, Dictionary<string, List<string>> dependency_dict)
+    private static void recurse_list(List<string> skills, Dictionary<string, List<string>> dependency_dict)
     {
-        if (skills.Count == 0 || gameData.dependency_dict.Count == 0)
+        if (skills.Count == 0 || dependency_dict.Keys.Count == 0)
             return;
 
-        if (GameData.cbkst_dict.ContainsKey(String.Join(",", skills)) == false)
-            GameData.cbkst_dict.Add(String.Join(",", skills), new List<string> { });
+        if (gameData.cbkst_dict.ContainsKey(String.Join(",", skills)) == false)
+            gameData.cbkst_dict.Add(String.Join(",", skills), new List<string> { });
 
-        List<string> no_dependency = skills.Where(x => gameData.dependency_dict[x].Count == 0).ToList();
+        List<string> no_dependency = skills.Where(x => dependency_dict[x].Count == 0).ToList();
 
         foreach (string skill in no_dependency)
         {
-            Dictionary<string, List<string>> new_dependency = remove(gameData.dependency_dict, skill);
+            Dictionary<string, List<string>> new_dependency = remove(dependency_dict, skill);
 
             List<string> new_list = new List<string>(new_dependency.Keys);
-
-            if (new_list.Count > 0 && GameData.cbkst_dict.ContainsKey(String.Join(",", new_list)) == false)
-                GameData.cbkst_dict.Add(String.Join(",", new_list), new List<string> { });
-
+            if (new_list.Count > 0 && gameData.cbkst_dict.ContainsKey(String.Join(",", new_list)) == false)
+                gameData.cbkst_dict.Add(String.Join(",", new_list), new List<string> { });
             try
             {
-                if (GameData.cbkst_dict[String.Join(",", new_list)].Contains(String.Join(",", skills)) == false)
+                if (gameData.cbkst_dict[String.Join(",", new_list)].Contains(String.Join(",", skills)) == false)
                 {
-                    GameData.cbkst_dict[String.Join(",", new_list)].Add(String.Join(",", skills));
+                    gameData.cbkst_dict[String.Join(",", new_list)].Add(String.Join(",", skills));
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 { }
             }
+
 
             recurse_list(new_list, new_dependency);
         }
     }
 
-    private Dictionary<string, List<string>> remove(Dictionary<string, List<string>> dependency_dict, string skill)
+    private static Dictionary<string, List<string>> remove(Dictionary<string, List<string>> dependency_dict, string skill)
     {
-        Dictionary<string, List<string>> copy = gameData.dependency_dict.ToDictionary(p => p.Key, p => p.Value.ToList());
+        Dictionary<string, List<string>> copy = dependency_dict.ToDictionary(p => p.Key, p => p.Value.ToList());
         List<string> removeKeys = copy.Where(x => x.Value.Contains(skill)).Select(x => x.Key).ToList();
 
         foreach (string key in removeKeys)

@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using TMPro;
 using System.IO;
+using System.Linq;
 
 /// <summary>
 /// Manage dialogs at the begining of the level
@@ -214,14 +215,6 @@ public class UISystem : FSystem
         {
             gameData.timer_paused = true;
             loadHistory();
-            /* 1) créer la liste des vecteurs comme levellist
-            2) récupérer le vecteur du niveau actuel : vectorCurrent
-            3) tester le score
-            4) si >= 2 on cherche dans la liste un niveau de gameData.cbkst_dict[vectorCurrent]
-            sinon on cherche un autre niveau qui a vectorCurrent*/
-            if (gameData.scoredStars >= 2)
-                PlayerPrefs.SetInt(gameData.levelToLoad.Item1, gameData.levelToLoad.Item2 + 1);
-            PlayerPrefs.Save();
         }
         else if (go.GetComponent<NewEnd>().endType == NewEnd.Detected)
         {
@@ -282,6 +275,19 @@ public class UISystem : FSystem
                     GameObjectManager.setGameObjectState(endPanel.transform.Find("NextLevel").gameObject, false);
                     GameObjectManager.setGameObjectState(endPanel.transform.Find("ReloadState").gameObject, false);
                 }
+
+                string skillCurrent = gameData.skillCurrent.Item2;
+                if (gameData.scoredStars >= 2)
+                {
+                    string new_skill = gameData.cbkst_dict[skillCurrent]
+                    [Random.Range(0, gameData.cbkst_dict[skillCurrent].Count)];
+                    gameData.skillCurrent.Item2 = new_skill;
+                    PlayerPrefs.SetString(gameData.levelToLoad.Item1, new_skill);
+                    if (gameData.levelToLoad.Item2 != 0)
+                        gameData.completed_levels.Add(gameData.levelToLoad.Item2);
+                }
+
+                PlayerPrefs.Save();
                 break;
         }
     }
@@ -501,7 +507,16 @@ public class UISystem : FSystem
     // See NextLevel button in editor
     public void nextLevel()
     {
-        gameData.levelToLoad.Item2++;
+        List<int> indexes = new List<int>();
+        for (int i = 0; i < gameData.skillList[gameData.levelToLoad.Item1].Count; i++)
+        {
+            if (System.String.Equals(gameData.skillList[gameData.levelToLoad.Item1][i], gameData.skillCurrent.Item2))
+                indexes.Add(i);
+            Debug.Log(i);
+        }
+
+        int level = indexes[Random.Range(0, indexes.Count)];
+        gameData.levelToLoad.Item2 = level;
         reloadScene();
         gameData.actionsHistory = null;
     }

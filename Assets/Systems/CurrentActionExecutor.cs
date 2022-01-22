@@ -30,35 +30,42 @@ public class CurrentActionExecutor : FSystem {
 		GameObject solutionItem = solutionGO.First();
 		GameObject agent = idToAgent[uniqueId];
 		// parse all teleporters
-		foreach (GameObject teleporter in teleporterGO)
-		{
-			// check if positions are equals
-			if (agent.GetComponent<Position>().x == teleporter.GetComponent<Position>().x && agent.GetComponent<Position>().z == teleporter.GetComponent<Position>().z)
+		if(teleporterGO.Count > 0)
+        {
+			foreach (GameObject teleporter in teleporterGO)
 			{
-				Debug.Log("Teleporter stepped on");
-				agent.GetComponent<Position>().x = teleporter.GetComponent<Teleporter>().x2;
-				agent.GetComponent<Position>().z = teleporter.GetComponent<Teleporter>().z2;
-				if (teleporter.GetComponent<Teleporter>().direction != 4)
+				// check if positions are equals
+				if (agent.GetComponent<Position>().x == teleporter.GetComponent<Position>().x && agent.GetComponent<Position>().z == teleporter.GetComponent<Position>().z)
 				{
-					agent.GetComponent<Direction>().direction = (Direction.Dir)teleporter.GetComponent<Teleporter>().direction;
+					Debug.Log("Teleporter stepped on");
+					agent.GetComponent<Position>().x = teleporter.GetComponent<Teleporter>().x2;
+					agent.GetComponent<Position>().z = teleporter.GetComponent<Teleporter>().z2;
+					if (teleporter.GetComponent<Teleporter>().direction != 4)
+					{
+						agent.GetComponent<Direction>().direction = (Direction.Dir)teleporter.GetComponent<Teleporter>().direction;
+
+					}
+					agent.transform.localPosition = new Vector3(agent.GetComponent<Position>().x * 3, agent.transform.localPosition.y, agent.GetComponent<Position>().z * 3);
+				}
+			}
+		}
+		if (solutionItem != null)
+        {
+			if (agent.GetComponent<Position>().x == solutionItem.GetComponent<Position>().x && agent.GetComponent<Position>().z == solutionItem.GetComponent<Position>().z)
+			{
+				GameObject go = solutionItem.GetComponent<ScriptRef>().uiContainer;
+				GameObjectManager.setGameObjectState(go, !go.activeInHierarchy);
+				agent.GetComponent<Position>().x = solutionItem.GetComponent<Teleporter>().x2;
+				agent.GetComponent<Position>().z = solutionItem.GetComponent<Teleporter>().z2;
+				if (solutionItem.GetComponent<Teleporter>().direction != 4)
+				{
+					agent.GetComponent<Direction>().direction = (Direction.Dir)solutionItem.GetComponent<Teleporter>().direction;
 
 				}
 				agent.transform.localPosition = new Vector3(agent.GetComponent<Position>().x * 3, agent.transform.localPosition.y, agent.GetComponent<Position>().z * 3);
 			}
 		}
-		if (agent.GetComponent<Position>().x == solutionItem.GetComponent<Position>().x && agent.GetComponent<Position>().z == solutionItem.GetComponent<Position>().z)
-		{
-			GameObject go = solutionItem.GetComponent<ScriptRef>().uiContainer;
-			GameObjectManager.setGameObjectState(go, !go.activeInHierarchy);
-			agent.GetComponent<Position>().x = solutionItem.GetComponent<Teleporter>().x2;
-			agent.GetComponent<Position>().z = solutionItem.GetComponent<Teleporter>().z2;
-			if (solutionItem.GetComponent<Teleporter>().direction != 4)
-			{
-				agent.GetComponent<Direction>().direction = (Direction.Dir)solutionItem.GetComponent<Teleporter>().direction;
 
-			}
-			agent.transform.localPosition = new Vector3(agent.GetComponent<Position>().x * 3, agent.transform.localPosition.y, agent.GetComponent<Position>().z * 3);
-		}
 
 	}
 	// each time a new currentAction is added, 

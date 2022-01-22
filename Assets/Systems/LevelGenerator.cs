@@ -59,6 +59,9 @@ public class LevelGenerator : FSystem
                         createCell(i, j);
                         createSpawnExit(i, j, false);
                         break;
+                    case 4: // Teleporter destination
+                        createTeleporterDest(i, j);
+                        break;
                 }
             }
         }
@@ -219,7 +222,7 @@ public class LevelGenerator : FSystem
     {
         GameObject teleporter;
 
-        teleporter = Object.Instantiate<GameObject>(Resources.Load("Prefabs/Teleporter") as GameObject, gameData.Level.transform.position + new Vector3(x1 * 3, 1.5f, z1 * 3), Quaternion.Euler(-90, 0, 0), gameData.Level.transform);
+        teleporter = Object.Instantiate<GameObject>(Resources.Load("Prefabs/TeleporterSource") as GameObject, gameData.Level.transform.position + new Vector3(x1 * 3, 1.5f, z1 * 3), Quaternion.Euler(-90, 0, 0), gameData.Level.transform);
 
 
 
@@ -252,6 +255,14 @@ public class LevelGenerator : FSystem
         wall.GetComponent<Position>().x = i;
         wall.GetComponent<Position>().z = j;
         GameObjectManager.bind(wall);
+    }
+
+    private void createTeleporterDest(int i, int j)
+    {
+        GameObject cell = Object.Instantiate<GameObject>(Resources.Load("Prefabs/Cell") as GameObject, gameData.Level.transform.position + new Vector3(i * 3, 0, j * 3), Quaternion.Euler(0, 0, 0), gameData.Level.transform);
+        GameObjectManager.bind(cell);
+        GameObject teleporter = Object.Instantiate<GameObject>(Resources.Load("Prefabs/TeleporterDestination") as GameObject, gameData.Level.transform.position + new Vector3(i * 3, 1.5f, j * 3), Quaternion.Euler(-90, 0, 0), gameData.Level.transform);
+        GameObjectManager.bind(teleporter);
     }
 
     private void eraseMap()

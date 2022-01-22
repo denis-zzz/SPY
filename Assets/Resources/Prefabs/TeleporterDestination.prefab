@@ -20,7 +20,7 @@ GameObject:
   - component: {fileID: -3075638957997508507}
   - component: {fileID: -4384851041592550924}
   m_Layer: 8
-  m_Name: Teleporter
+  m_Name: TeleporterDestination
   m_TagString: Teleporter
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -373,7 +373,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 0, g: 1, b: 0.083981514, a: 1}
+      maxColor: {r: 0, g: 0.5657749, b: 1, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -5122,3 +5122,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   x2: 0
   z2: 0
+  direction: 0

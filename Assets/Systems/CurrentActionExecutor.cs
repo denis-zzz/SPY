@@ -65,7 +65,11 @@ public class CurrentActionExecutor : FSystem {
 	private void onNewCurrentAction(GameObject currentAction)
 	{
 		CurrentAction ca = currentAction.GetComponent<CurrentAction>();
-		idToAgent.Add(currentAction.GetInstanceID(), ca.agent);
+        if (!idToAgent.ContainsKey(currentAction.GetInstanceID()))
+        {
+			idToAgent.Add(currentAction.GetInstanceID(), ca.agent);
+		}
+		
 		if (ca.agent.CompareTag("Player"))
 		{
 			// We notify that player is moving

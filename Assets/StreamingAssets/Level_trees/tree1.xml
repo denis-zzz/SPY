@@ -1,34 +1,30 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <tree>
-	<for>
-		<if>
-			<marcher></marcher>
-		</if>
-	</for>
+	<f>
+		<i>
+			<m></m>
+		</i>
+	</f>
 
-	<while>
-		<if>
-			<marcher></marcher>
-		</if>
-	</while>
+	<w>
+		<i>
+			<m></m>
+		</i>
+	</w>
 
-	<wait>
-		<marcher></marcher>
-	</wait>
+	<x>
+		<m></m>
+	</x>
 
-	<tourner>
-		<marcher></marcher>
-	</tourner>
+	<t>
+		<m></m>
+	</t>
 
-	<activer>
-		<marcher></marcher>
-	</activer>
+	<a>
+		<m></m>
+	</a>
 
-	<retourner>
-		<marcher></marcher>
-	</retourner>
-
-	<drone>
-		<marcher></marcher>
-	</drone>
+	<r>
+		<m></m>
+	</r>
 </tree>

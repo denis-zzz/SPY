@@ -214,7 +214,13 @@ public class UISystem : FSystem
         {
             gameData.timer_paused = true;
             loadHistory();
-            PlayerPrefs.SetInt(gameData.levelToLoad.Item1, gameData.levelToLoad.Item2 + 1);
+            /* 1) créer la liste des vecteurs comme levellist
+            2) récupérer le vecteur du niveau actuel : vectorCurrent
+            3) tester le score
+            4) si >= 2 on cherche dans la liste un niveau de gameData.cbkst_dict[vectorCurrent]
+            sinon on cherche un autre niveau qui a vectorCurrent*/
+            if (gameData.scoredStars >= 2)
+                PlayerPrefs.SetInt(gameData.levelToLoad.Item1, gameData.levelToLoad.Item2 + 1);
             PlayerPrefs.Save();
         }
         else if (go.GetComponent<NewEnd>().endType == NewEnd.Detected)
@@ -278,27 +284,26 @@ public class UISystem : FSystem
 
     private void setScoreStars(int score, Transform scoreCanvas)
     {
-        int scoredStars = 0;
         if (gameData.levelToLoadScore != null)
         {
             //check 0, 1, 2 or 3 stars
             if (score >= gameData.levelToLoadScore[0])
             {
-                scoredStars = 3;
+                gameData.scoredStars = 3;
             }
             else if (score >= gameData.levelToLoadScore[1])
             {
-                scoredStars = 2;
+                gameData.scoredStars = 2;
             }
             else
             {
-                scoredStars = 1;
+                gameData.scoredStars = 1;
             }
         }
 
         for (int nbStar = 0; nbStar < 4; nbStar++)
         {
-            if (nbStar == scoredStars)
+            if (nbStar == gameData.scoredStars)
                 GameObjectManager.setGameObjectState(scoreCanvas.GetChild(nbStar).gameObject, true);
             else
                 GameObjectManager.setGameObjectState(scoreCanvas.GetChild(nbStar).gameObject, false);
@@ -306,9 +311,9 @@ public class UISystem : FSystem
 
         //save score only if better score
         int savedScore = PlayerPrefs.GetInt(gameData.levelToLoad.Item1 + Path.DirectorySeparatorChar + gameData.levelToLoad.Item2 + gameData.scoreKey, 0);
-        if (savedScore < scoredStars)
+        if (savedScore < gameData.scoredStars)
         {
-            PlayerPrefs.SetInt(gameData.levelToLoad.Item1 + Path.DirectorySeparatorChar + gameData.levelToLoad.Item2 + gameData.scoreKey, scoredStars);
+            PlayerPrefs.SetInt(gameData.levelToLoad.Item1 + Path.DirectorySeparatorChar + gameData.levelToLoad.Item2 + gameData.scoreKey, gameData.scoredStars);
             PlayerPrefs.Save();
         }
     }

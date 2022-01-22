@@ -8,6 +8,7 @@ public class GameData : MonoBehaviour
     public Dictionary<string, List<string>> levelList; //key = directory name, value = list of level file name
     public (string, int) levelToLoad = ("Campagne", 1); //directory name, level index
     public int[] levelToLoadScore; //levelToLoadScore[0] = best score (3 stars) ; levelToLoadScore[1] = medium score (2 stars)
+    public int scoredStars = 0;
     public List<(string, string)> dialogMessage; //list of (dialogText, imageName)
     public Dictionary<string, int> actionBlocLimit;
     public string scoreKey = "score";
@@ -18,4 +19,7 @@ public class GameData : MonoBehaviour
     public GameObject actionsHistory; //all actions made in the level, displayed at the end
     public float timer;
     public bool timer_paused = true;
+
+    public Dictionary<string, List<string>> dependency_dict = new Dictionary<string, List<string>>();
+    public static Dictionary<string, List<string>> cbkst_dict = new Dictionary<string, List<string>>();
 }

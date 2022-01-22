@@ -260,7 +260,9 @@ public class UISystem : FSystem
                 int TimeScoreBase = 1000;
                 int NbActionScoreBase = 9000;
                 int NbCoinBase = 2000;
-                float score = TimeScoreBase * Mathf.Pow((float)0.90, gameData.bestTime - gameData.timer) + NbActionScoreBase * Mathf.Pow((float)0.90, gameData.totalActionBloc - gameData.minAction) + NbCoinBase * gameData.totalCoin;
+                float score = TimeScoreBase * Mathf.Pow((float)0.90, gameData.timer - gameData.bestTime)
+                + NbActionScoreBase * Mathf.Pow((float)0.8, gameData.totalActionBloc - gameData.minAction) + NbCoinBase * gameData.totalCoin;
+
                 Transform verticalCanvas = endPanel.transform.Find("VerticalCanvas");
                 verticalCanvas.GetComponentInChildren<TextMeshProUGUI>().text = "Bravo vous avez gagné !\nScore: " + score;
                 setScoreStars(score, verticalCanvas.Find("ScoreCanvas"));
@@ -276,15 +278,25 @@ public class UISystem : FSystem
                     GameObjectManager.setGameObjectState(endPanel.transform.Find("ReloadState").gameObject, false);
                 }
 
-                string skillCurrent = gameData.skillCurrent.Item2;
-                if (gameData.scoredStars >= 2)
+                string skillCurrent = gameData.skillList[gameData.levelToLoad.Item1][gameData.levelToLoad.Item2];
+                if (gameData.scoredStars >= 2 && gameData.cbkst_dict[skillCurrent].Count > 0)
                 {
                     string new_skill = gameData.cbkst_dict[skillCurrent]
                     [Random.Range(0, gameData.cbkst_dict[skillCurrent].Count)];
                     gameData.skillCurrent.Item2 = new_skill;
                     PlayerPrefs.SetString(gameData.levelToLoad.Item1, new_skill);
-                    if (gameData.levelToLoad.Item2 != 0)
-                        gameData.completed_levels.Add(gameData.levelToLoad.Item2);
+                }
+                else
+                {
+                    List<int> indexes = new List<int>();
+                    for (int i = 0; i < gameData.skillList[gameData.levelToLoad.Item1].Count; i++)
+                    {
+                        if (gameData.skillList[gameData.levelToLoad.Item1][i].Equals(skillCurrent))
+                            indexes.Add(i);
+                    }
+
+                    int level = indexes[Random.Range(0, indexes.Count)];
+                    gameData.levelToLoad.Item2 = level;
                 }
 
                 PlayerPrefs.Save();
@@ -510,13 +522,14 @@ public class UISystem : FSystem
         List<int> indexes = new List<int>();
         for (int i = 0; i < gameData.skillList[gameData.levelToLoad.Item1].Count; i++)
         {
-            if (System.String.Equals(gameData.skillList[gameData.levelToLoad.Item1][i], gameData.skillCurrent.Item2))
+            if (gameData.skillList[gameData.levelToLoad.Item1][i].Equals(gameData.skillCurrent.Item2))
                 indexes.Add(i);
-            Debug.Log(i);
         }
 
         int level = indexes[Random.Range(0, indexes.Count)];
         gameData.levelToLoad.Item2 = level;
+        if (gameData.levelToLoad.Item2 != 0)
+            gameData.completed_levels.Add(gameData.levelToLoad.Item2);
         reloadScene();
         gameData.actionsHistory = null;
     }

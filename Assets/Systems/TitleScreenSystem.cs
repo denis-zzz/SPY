@@ -111,7 +111,7 @@ public class TitleScreenSystem : FSystem
             {
                 if (child.Name.Equals("skill"))
                 {
-                    skillList.Add(repositoryPath + Path.DirectorySeparatorChar + (child.Attributes.GetNamedItem("name").Value));
+                    skillList.Add((child.Attributes.GetNamedItem("name").Value));
                 }
             }
             return skillList;

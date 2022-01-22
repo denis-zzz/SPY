@@ -28,7 +28,7 @@ public class CbkstSystem : FSystem
         }
     }
 
-    public void build_dependance_dict_from_XML(string filename)
+    private void build_dependance_dict_from_XML(string filename)
     {
         XmlDocument doc = new XmlDocument();
         doc.Load(filename);
@@ -54,7 +54,7 @@ public class CbkstSystem : FSystem
             gameData.dependency_dict[node.Name].Add(node.ParentNode.Name);
     }
 
-    public void build_cbkst_dict(Dictionary<string, List<string>> dependency_dict)
+    private void build_cbkst_dict(Dictionary<string, List<string>> dependency_dict)
     {
         List<string> skills = new List<string>(gameData.dependency_dict.Keys);
         recurse_list(skills, gameData.dependency_dict);

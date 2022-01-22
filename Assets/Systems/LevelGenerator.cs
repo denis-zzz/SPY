@@ -106,19 +106,6 @@ public class LevelGenerator : FSystem
 
         if (script != null)
         {
-            /*Comment faire :
-         Cr?er un nouveau syst?me DynamicCanvas avec le code en dessous, Dans system Dynamic Canvas=> famille allOfComponent (typeof(XMLTarget))
-        Composant XMLTarget {type:String, script:List<GO>(); ...}
-        Dans le systeme DynamicCanvas, faire la fonction pour ajouter les instructions dans le canvas. Faire pour qu'elle s'ex?cute d?s qu'on g?n?re un component XMLTarget (grace ? addEntryCallback)
-        D?s qu'on a fini la fonction, il faut supprimer le composant, sinon addEntryCallback ne se r?execute pas ? la prochaine cr?ation de composant
-
-        Du coup ici, on aura juste :
-            GameObjectManager.addComponent<XMLTarget>(containerParent, { type = type; script = script; ... })
-
-
-
-         */
-
             if (type == "player" && editableScriptContainer.First().transform.childCount == 1)
             { //player & empty script (1 child for position bar)
                 GameObject editableCanvas = editableScriptContainer.First();
@@ -133,7 +120,6 @@ public class LevelGenerator : FSystem
                     GameObjectManager.addComponent<Dropped>(act.gameObject);
                 }
                 LayoutRebuilder.ForceRebuildLayoutImmediate(editableCanvas.GetComponent<RectTransform>());
-                /*GameObjectManager.addComponent<EditableCanvas>(editableCanvas, new { script = script });*/
 
             }
 

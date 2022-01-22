@@ -256,7 +256,6 @@ public class UISystem : FSystem
                 endPanel.GetComponent<AudioSource>().Play();
                 break;
             case 2:
-                /*int score = (10000 / (gameData.totalActionBloc + 1) + 5000 / (gameData.totalStep + 1) + 6000 / (gameData.totalExecute + 1) + 5000 * gameData.totalCoin);*/
                 int TimeScoreBase = 1000;
                 int NbActionScoreBase = 9000;
                 int NbCoinBase = 2000;
@@ -306,22 +305,20 @@ public class UISystem : FSystem
 
     private void setScoreStars(float score, Transform scoreCanvas)
     {
-        if (gameData.levelToLoadScore != null)
+        //check 0, 1, 2 or 3 stars
+        if (score >= 8000)
         {
-            //check 0, 1, 2 or 3 stars
-            if (score >= 8000)
-            {
-                gameData.scoredStars = 3;
-            }
-            else if (score >= 6000)
-            {
-                gameData.scoredStars = 2;
-            }
-            else
-            {
-                gameData.scoredStars = 1;
-            }
+            gameData.scoredStars = 3;
         }
+        else if (score >= 6000)
+        {
+            gameData.scoredStars = 2;
+        }
+        else
+        {
+            gameData.scoredStars = 1;
+        }
+ 
 
         for (int nbStar = 0; nbStar < 4; nbStar++)
         {

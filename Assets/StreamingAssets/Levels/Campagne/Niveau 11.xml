@@ -71,7 +71,6 @@
         <action actionType="TurnRight"/>
     </script>
   </enemy>
-  <score twoStars="4142" threeStars="5142"/>
   <minAction minAction="6"/>
   <bestTime bestTime="15"/>
 </level>

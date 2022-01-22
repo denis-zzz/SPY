@@ -1,0 +1,214 @@
+<?xml version="1.0"?>
+<level>
+  <map>
+    <line>
+      <row value="1" />
+      <row value="1" />
+      <row value="1" />
+      <row value="1" />
+      <row value="1" />
+      <row value="1" />
+      <row value="1" />
+      <row value="1" />
+      <row value="1" />
+      <row value="1" />
+    </line>
+    <line>
+      <row value="1" />
+      <row value="1" />
+      <row value="1" />
+      <row value="0" />
+      <row value="1" />
+      <row value="1" />
+      <row value="1" />
+      <row value="1" />
+      <row value="1" />
+      <row value="1" />
+    </line>
+    <line>
+      <row value="1" />
+      <row value="1" />
+      <row value="1" />
+      <row value="2" />
+      <row value="0" />
+      <row value="0" />
+      <row value="0" />
+      <row value="0" />
+      <row value="0" />
+      <row value="1" />
+    </line>
+    <line>
+      <row value="1" />
+      <row value="0" />
+      <row value="1" />
+      <row value="0" />
+      <row value="0" />
+      <row value="1" />
+      <row value="0" />
+      <row value="1" />
+      <row value="0" />
+      <row value="1" />
+    </line>
+    <line>
+      <row value="1" />
+      <row value="0" />
+      <row value="1" />
+      <row value="0" />
+      <row value="0" />
+      <row value="0" />
+      <row value="0" />
+      <row value="1" />
+      <row value="0" />
+      <row value="1" />
+    </line>
+    <line>
+      <row value="1" />
+      <row value="0" />
+      <row value="0" />
+      <row value="0" />
+      <row value="1" />
+      <row value="1" />
+      <row value="0" />
+      <row value="0" />
+      <row value="0" />
+      <row value="1" />
+    </line>
+    <line>
+      <row value="1" />
+      <row value="0" />
+      <row value="0" />
+      <row value="1" />
+      <row value="1" />
+      <row value="1" />
+      <row value="0" />
+      <row value="1" />
+      <row value="0" />
+      <row value="1" />
+    </line>
+    <line>
+      <row value="1" />
+      <row value="1" />
+      <row value="1" />
+      <row value="1" />
+      <row value="1" />
+      <row value="1" />
+      <row value="0" />
+      <row value="0" />
+      <row value="0" />
+      <row value="1" />
+    </line>
+    <line>
+      <row value="1" />
+      <row value="1" />
+      <row value="1" />
+      <row value="1" />
+      <row value="1" />
+      <row value="1" />
+      <row value="1" />
+      <row value="1" />
+      <row value="0" />
+      <row value="1" />
+    </line>
+    <line>
+      <row value="1" />
+      <row value="1" />
+      <row value="1" />
+      <row value="1" />
+      <row value="1" />
+      <row value="1" />
+      <row value="4" />
+      <row value="0" />
+      <row value="0" />
+      <row value="1" />
+    </line>
+    <line>
+      <row value="1" />
+      <row value="1" />
+      <row value="1" />
+      <row value="1" />
+      <row value="1" />
+      <row value="1" />
+      <row value="1" />
+      <row value="1" />
+      <row value="3" />
+      <row value="1" />
+    </line>
+    <line>
+      <row value="1" />
+      <row value="1" />
+      <row value="1" />
+      <row value="1" />
+      <row value="1" />
+      <row value="1" />
+      <row value="1" />
+      <row value="1" />
+      <row value="1" />
+      <row value="1" />
+    </line>
+
+  </map>
+  <dialogs dialog="Attention ! Il y a de nombreux garde ! Le téléporteur pourrait t'aider à les éviter"/>
+  <dialogs dialog="Plateforme verte : Source du téléporteur ; Plateforme bleue : Destination du téléporteur"/>
+  <dialogs dialog="Si besoin, marcher sur la plateforme violette te donnera la solution"/>
+  <actionBlocLimit>
+    <limit actionType="Forward" limit="-1" />
+    <limit actionType="TurnLeft" limit="-1" />
+    <limit actionType="TurnRight" limit="-1" />
+    <limit actionType="Wait" limit="-1" />
+    <limit actionType="Activate" limit="-1" />
+    <limit actionType="TurnBack" limit="-1" />
+    <limit actionType="If" limit="-1" />
+    <limit actionType="For" limit="-1" />
+	<limit actionType="While" limit="-1" />
+  </actionBlocLimit>
+  <player posX="2" posZ="3" direction="0" />
+  <enemy posX="5" posZ="8" direction="3" range="3" selfRange="True" typeRange="0">
+    <script>
+      <action actionType="Forever">
+        <action actionType="Wait"/>
+        <action actionType="Wait"/>
+        <action actionType="TurnLeft"/>
+        <action actionType="Wait"/>
+        <action actionType="Wait"/>
+        <action actionType="TurnRight"/>
+      </action>
+    </script>
+  </enemy>
+  <enemy posX="4" posZ="4" direction="0" range="2" selfRange="True" typeRange="0">
+    <script>
+      <action actionType="Forever">
+        <action actionType="TurnLeft"/>
+        <action actionType="TurnLeft"/>
+        <action actionType="TurnRight"/>
+        <action actionType="TurnRight"/>
+      </action>
+    </script>
+  </enemy>
+  <enemy posX="6" posZ="2" direction="3" range="1" selfRange="True" typeRange="0">
+    <script>
+      <action actionType="Forever">
+        <action actionType="Wait"/>
+        <action actionType="TurnLeft"/>
+        <action actionType="Wait"/>
+        <action actionType="TurnRight"/>
+      </action>
+    </script>
+  </enemy>
+  <teleporters>
+    <teleporter x1="3" z1="1" x2 ="9" z2="6" direction="4"/>
+  </teleporters>
+  <solution x1="1" z1="3" x2 ="2" z2="3" direction ="0">
+    <script>
+      <action actionType="TurnRight"/>
+      <action actionType="Forward"/>
+      <action actionType="For" nbFor="4">
+        <action actionType="Forward"/>
+        <action actionType="Forward"/>
+        <action actionType="TurnRight"/>
+      </action>
+      <action actionType="Forward"/>
+    </script>
+  </solution>
+  <minAction minAction="7"/>
+  <bestTime bestTime="30"/>
+</level>

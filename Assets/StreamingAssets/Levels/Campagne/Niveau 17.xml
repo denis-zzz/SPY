@@ -124,7 +124,6 @@
       </action>
     </script>
   </enemy>
-  <score twoStars="2499" threeStars="9153"/>
   <minAction minAction="5"/>
   <bestTime bestTime="45"/>
 </level>

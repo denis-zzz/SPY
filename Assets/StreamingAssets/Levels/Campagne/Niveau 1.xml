@@ -37,7 +37,6 @@
 	<limit actionType="While" limit="0" />
   </actionBlocLimit>
   <player posX="2" posZ="1" direction="3" />
-  <score twoStars="7999" threeStars="10500"/>
   <minAction minAction="1"/>
   <bestTime bestTime="5"/>
 </level>

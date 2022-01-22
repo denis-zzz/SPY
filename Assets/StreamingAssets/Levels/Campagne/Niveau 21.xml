@@ -199,13 +199,13 @@
   </teleporters>
   <solution x1="1" z1="3" x2 ="2" z2="3" direction ="0">
     <script>
-      <action actionType="Forward"/>
-      <action actionType="Forward"/>
       <action actionType="TurnRight"/>
       <action actionType="Forward"/>
-      <action actionType="Forward"/>
-      <action actionType="TurnRight"/>
-      <action actionType="Forward"/>
+      <action actionType="For" nbFor="4">
+        <action actionType="Forward"/>
+        <action actionType="Forward"/>
+        <action actionType="TurnRight"/>
+      </action>
       <action actionType="Forward"/>
     </script>
   </solution>

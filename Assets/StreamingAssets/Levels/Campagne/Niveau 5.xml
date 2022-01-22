@@ -7,27 +7,23 @@
       <row value="1" />
       <row value="1" />
       <row value="1" />
-      <row value="1" />
     </line>
     <line>
       <row value="1" />
-      <row value="1" />
       <row value="0" />
       <row value="0" />
-      <row value="0" />
-      <row value="1" />
-    </line>
-    <line>
-      <row value="1" />
-      <row value="1" />
-      <row value="0" />
-      <row value="1" />
       <row value="0" />
       <row value="1" />
     </line>
     <line>
       <row value="1" />
       <row value="0" />
+      <row value="1" />
+      <row value="0" />
+      <row value="1" />
+    </line>
+    <line>
+      <row value="1" />
       <row value="2" />
       <row value="1" />
       <row value="3" />
@@ -39,15 +35,8 @@
       <row value="1" />
       <row value="1" />
       <row value="1" />
-      <row value="1" />
     </line>
   </map>
-  <teleporters>
-    <teleporter x1="2" z1="2" x2 ="2" z2="4" direction="4">
-      <script>
-      </script>
-    </teleporter>
-  </teleporters>
   <actionBlocLimit>
     <limit actionType="Forward" limit="-1" />
     <limit actionType="TurnLeft" limit="-1" />
@@ -58,18 +47,8 @@
     <limit actionType="If" limit="0" />
     <limit actionType="For" limit="0" />
   </actionBlocLimit>
-  <player posX="3" posZ="2" direction="3" />
-  <solution x1="3" z1="1" x2 ="3" z2="2" direction ="3">
-    <script>
-      <action actionType="Forward"/>
-      <action actionType="Forward"/>
-      <action actionType="TurnRight"/>
-      <action actionType="Forward"/>
-      <action actionType="Forward"/>
-      <action actionType="TurnRight"/>
-      <action actionType="Forward"/>
-      <action actionType="Forward"/>
-    </script>
-  </solution>
+  <player posX="3" posZ="1" direction="3" />
   <score twoStars="3666" threeStars="4666"/>
+  <minAction minAction="8"/>
+  <bestTime bestTime="15"/>
 </level>

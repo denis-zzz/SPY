@@ -346,6 +346,14 @@ public class LevelGenerator : FSystem
                     gameData.levelToLoadScore[0] = int.Parse(child.Attributes.GetNamedItem("threeStars").Value);
                     gameData.levelToLoadScore[1] = int.Parse(child.Attributes.GetNamedItem("twoStars").Value);
                     break;
+
+                case "minAction":
+                    gameData.minAction = int.Parse(child.Attributes.GetNamedItem("minAction").Value);
+                    break;
+
+                case "bestTime":
+                    gameData.bestTime = int.Parse(child.Attributes.GetNamedItem("bestTime").Value);
+                    break;
             }
         }
 

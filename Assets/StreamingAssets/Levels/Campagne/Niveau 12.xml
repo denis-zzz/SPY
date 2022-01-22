@@ -79,4 +79,6 @@
     </script>   
   </player>
   <score twoStars="0" threeStars="6888"/>
+  <minAction minAction="2"/>
+  <bestTime bestTime="15"/>
 </level>

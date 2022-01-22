@@ -64,4 +64,6 @@
   </actionBlocLimit>
   <player posX="4" posZ="4" direction="3" />
   <score twoStars="3875" threeStars="4875"/>
+  <minAction minAction="7"/>
+  <bestTime bestTime="18"/>
 </level>

@@ -210,4 +210,6 @@
     </script>
   </solution>
   <score twoStars="2499" threeStars="9153"/>
+  <minAction minAction="7"/>
+  <bestTime bestTime="30"/>
 </level>

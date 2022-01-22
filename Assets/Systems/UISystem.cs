@@ -263,7 +263,11 @@ public class UISystem : FSystem
                 endPanel.GetComponent<AudioSource>().Play();
                 break;
             case 2:
-                int score = (10000 / (gameData.totalActionBloc + 1) + 5000 / (gameData.totalStep + 1) + 6000 / (gameData.totalExecute + 1) + 5000 * gameData.totalCoin);
+                /*int score = (10000 / (gameData.totalActionBloc + 1) + 5000 / (gameData.totalStep + 1) + 6000 / (gameData.totalExecute + 1) + 5000 * gameData.totalCoin);*/
+                int TimeScoreBase = 1000;
+                int NbActionScoreBase = 9000;
+                int NbCoinBase = 2000;
+                float score = TimeScoreBase * Mathf.Pow((float)0.90, gameData.bestTime - gameData.timer) + NbActionScoreBase * Mathf.Pow((float)0.90, gameData.totalActionBloc - gameData.minAction) + NbCoinBase * gameData.totalCoin;
                 Transform verticalCanvas = endPanel.transform.Find("VerticalCanvas");
                 verticalCanvas.GetComponentInChildren<TextMeshProUGUI>().text = "Bravo vous avez gagné !\nScore: " + score;
                 setScoreStars(score, verticalCanvas.Find("ScoreCanvas"));
@@ -282,16 +286,16 @@ public class UISystem : FSystem
         }
     }
 
-    private void setScoreStars(int score, Transform scoreCanvas)
+    private void setScoreStars(float score, Transform scoreCanvas)
     {
         if (gameData.levelToLoadScore != null)
         {
             //check 0, 1, 2 or 3 stars
-            if (score >= gameData.levelToLoadScore[0])
+            if (score >= 8000)
             {
                 gameData.scoredStars = 3;
             }
-            else if (score >= gameData.levelToLoadScore[1])
+            else if (score >= 6000)
             {
                 gameData.scoredStars = 2;
             }

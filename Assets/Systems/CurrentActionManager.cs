@@ -466,7 +466,6 @@ public class CurrentActionManager : FSystem
             // iteration are available
             else
             {
-                // in case ForAction has no child
                 if (WhileAct.firstChild == null)
                 {
                     // return next action
@@ -476,7 +475,6 @@ public class CurrentActionManager : FSystem
                         return getNextAction(WhileAct.next, agent);
                 }
                 else
-                // return first child
                 {
                     // return first child
                     if (WhileAct.firstChild.GetComponent<BasicAction>())

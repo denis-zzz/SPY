@@ -67,14 +67,14 @@
   </map>
   <dialogs dialog="Si besoin, marcher sur la plateforme violette te donnera la solution"/>
   <actionBlocLimit>
-    <limit actionType="Forward" limit="2" />
-    <limit actionType="TurnLeft" limit="1" />
-    <limit actionType="TurnRight" limit="1" />
+    <limit actionType="Forward" limit="-1" />
+    <limit actionType="TurnLeft" limit="-1" />
+    <limit actionType="TurnRight" limit="-1" />
     <limit actionType="Wait" limit="0" />
-    <limit actionType="Activate" limit="0" />
+    <limit actionType="Activate" limit="-1" />
     <limit actionType="TurnBack" limit="0" />
-    <limit actionType="If" limit="1" />
-    <limit actionType="For" limit="1" />
+    <limit actionType="If" limit="-1" />
+    <limit actionType="For" limit="0" />
 	<limit actionType="While" limit="0" />
   </actionBlocLimit>
   <activable posX="3" posZ="2" direction="1">
@@ -93,10 +93,10 @@
   </teleporters>
   <solution x1="7" z1="1" x2 ="7" z2="2" direction ="3">
     <script>
-      <action actionType="For" nbFor="3">
         <action actionType="Forward"/>
         <action actionType="TurnRight"/>
-      </action>
+        <action actionType="Forward"/>
+        <action actionType="Forward"/>
     </script>
   </solution>
 </level>

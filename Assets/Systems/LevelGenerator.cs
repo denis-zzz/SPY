@@ -324,6 +324,7 @@ public class LevelGenerator : FSystem
                     (Direction.Dir)int.Parse(child.Attributes.GetNamedItem("direction").Value), "solution", readXMLScript(child.ChildNodes[0]));
                     solution.GetComponent<Teleporter>().x2 = int.Parse(child.Attributes.GetNamedItem("x2").Value);
                     solution.GetComponent<Teleporter>().z2 = int.Parse(child.Attributes.GetNamedItem("z2").Value);
+                    solution.GetComponent<Teleporter>().direction = int.Parse(child.Attributes.GetNamedItem("direction").Value);
                     break;
 
                 case "minAction":

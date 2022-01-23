@@ -491,7 +491,6 @@ public class UISystem : FSystem
         gameData.totalStep = 0;
         gameData.totalExecute = 0;
         gameData.totalCoin = 0;
-        gameData.levelToLoadScore = null;
         gameData.dialogMessage = new List<(string, string)>();
         GameObjectManager.loadScene("MainScene");
         gameData.timer = 0f;
@@ -507,7 +506,6 @@ public class UISystem : FSystem
         gameData.totalStep = 0;
         gameData.totalExecute = 0;
         gameData.totalCoin = 0;
-        gameData.levelToLoadScore = null;
         gameData.dialogMessage = new List<(string, string)>();
         gameData.actionsHistory = null;
         GameObjectManager.loadScene("TitleScreen");
@@ -538,7 +536,6 @@ public class UISystem : FSystem
         gameData.totalStep = 0;
         gameData.totalExecute = 0;
         gameData.totalCoin = 0;
-        gameData.levelToLoadScore = null;
         gameData.dialogMessage = new List<(string, string)>();
         if (gameData.actionsHistory != null)
             UnityEngine.Object.DontDestroyOnLoad(gameData.actionsHistory);

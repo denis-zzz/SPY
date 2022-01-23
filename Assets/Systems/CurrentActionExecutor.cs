@@ -53,6 +53,7 @@ public class CurrentActionExecutor : FSystem
                 }
             }
         }
+        // parse solution plateform
         if (solutionItem != null)
         {
             if (agent.GetComponent<Position>().x == solutionItem.GetComponent<Position>().x && agent.GetComponent<Position>().z == solutionItem.GetComponent<Position>().z)
@@ -70,8 +71,6 @@ public class CurrentActionExecutor : FSystem
                 agent.transform.localPosition = new Vector3(agent.GetComponent<Position>().x * 3, agent.transform.localPosition.y, agent.GetComponent<Position>().z * 3);
             }
         }
-
-
     }
 
     public void reloadScene()
@@ -80,7 +79,6 @@ public class CurrentActionExecutor : FSystem
         gameData.totalStep = 0;
         gameData.totalExecute = 0;
         gameData.totalCoin = 0;
-        gameData.levelToLoadScore = null;
         gameData.dialogMessage = new List<(string, string)>();
         GameObjectManager.loadScene("MainScene");
         gameData.timer = 0f;

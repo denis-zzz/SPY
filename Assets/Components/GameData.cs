@@ -10,9 +10,8 @@ public class GameData : MonoBehaviour
     public (string, int) levelToLoad = ("Campagne", 1); //directory name, level index
     public List<int> completed_levels = new List<int>() { 0 };
     public (string, string) skillCurrent = ("Campagne", "m");
-    public int[] levelToLoadScore; //levelToLoadScore[0] = best score (3 stars) ; levelToLoadScore[1] = medium score (2 stars)
-    public float bestTime;
-    public int minAction;
+    public float bestTime; // best time saved for this level (used to compute final score)
+    public int minAction; // min number of actions to complete the level (used to compute final score)
     public int scoredStars = 0;
     public List<(string, string)> dialogMessage; //list of (dialogText, imageName)
     public Dictionary<string, int> actionBlocLimit;

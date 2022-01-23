@@ -267,7 +267,6 @@ public class LevelGenerator : FSystem
         gameData.totalStep = 0;
         gameData.totalExecute = 0;
         gameData.totalCoin = 0;
-        gameData.levelToLoadScore = null;
         gameData.dialogMessage = new List<(string, string)>();
         gameData.actionBlocLimit = new Dictionary<string, int>();
         map = new List<List<int>>();
@@ -327,12 +326,6 @@ public class LevelGenerator : FSystem
                     solution.GetComponent<Teleporter>().z2 = int.Parse(child.Attributes.GetNamedItem("z2").Value);
                     break;
 
-                case "score":
-                    gameData.levelToLoadScore = new int[2];
-                    gameData.levelToLoadScore[0] = int.Parse(child.Attributes.GetNamedItem("threeStars").Value);
-                    gameData.levelToLoadScore[1] = int.Parse(child.Attributes.GetNamedItem("twoStars").Value);
-                    break;
-
                 case "minAction":
                     gameData.minAction = int.Parse(child.Attributes.GetNamedItem("minAction").Value);
                     break;
@@ -384,7 +377,6 @@ public class LevelGenerator : FSystem
         int direction;
         foreach (XmlNode teleportNode in teleportersNode.ChildNodes)
         {
-
             x1 = int.Parse(teleportNode.Attributes.GetNamedItem("x1").Value);
             z1 = int.Parse(teleportNode.Attributes.GetNamedItem("z1").Value);
             x2 = int.Parse(teleportNode.Attributes.GetNamedItem("x2").Value);
